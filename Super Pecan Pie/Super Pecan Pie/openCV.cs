@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Emgu.CV;
 using System.Drawing;
 using Emgu.CV.Structure;
+using Emgu.CV.UI;
 
 namespace Super_Pecan_Pie
 {
@@ -15,26 +16,29 @@ namespace Super_Pecan_Pie
         public void findImages()
         {
 
-
+            //Image<Bgr, Byte> frame1;
             Mat frame1 = new Mat();
-            Mat frame2 = new Mat();
-            Mat frame3 = new Mat();
-            Mat frame4 = new Mat();
-
-            CascadeClassifier car_Cascade = new CascadeClassifier("cars.xml");
-            int count = 0;
+            //IImage frame1 = new Mat();
+            //Mat frame2;
+            //Mat frame3 = new Mat();
+            //Mat frame4 = new Mat();
             double scale = 5;
+            int count = 0;
+            
+           
 
-            VideoCapture vid1 = new VideoCapture(1);
-            VideoCapture vid2 = new VideoCapture(0);
-            VideoCapture vid3 = new VideoCapture(2);
-            VideoCapture vid4 = new VideoCapture(3);
+            VideoCapture vid1 = new VideoCapture(0);
+            //VideoCapture vid2 = new VideoCapture(0);
+            //VideoCapture vid3 = new VideoCapture(2);
+            //VideoCapture vid4 = new VideoCapture(3);
 
+
+            CascadeClassifier car_Cascade = new CascadeClassifier("Resources/cars.xml");
             if (!vid1.IsOpened)
             {
                 Console.WriteLine("v1 video not read");
             }
-            if (!vid2.IsOpened)
+            /*if (!vid2.IsOpened)
             {
                 Console.WriteLine("v2 video not read");
             }
@@ -45,23 +49,27 @@ namespace Super_Pecan_Pie
             if (!vid4.IsOpened)
             {
                 Console.WriteLine("v4 video not read");
-            }
-
+            }*/
+            ImageViewer m_frmSourceImage = new ImageViewer(frame1, "Original Image");
             while (true)
             {
                 vid1.Read(frame1);
-                vid1.Read(frame2);
-                vid1.Read(frame3);
-                vid1.Read(frame4);
-
+                //vid1.Read(frame2);
+                //vid1.Read(frame3);
+                //vid1.Read(frame4);
+                
+                //CvInvoke.Imshow("cam1", frame1);
                 detectAndDraw(frame1, car_Cascade, scale, count);
-                detectAndDraw(frame2, car_Cascade, scale, count);
-                detectAndDraw(frame3, car_Cascade, scale, count);
-                detectAndDraw(frame4, car_Cascade, scale, count);
+                //detectAndDraw(frame2, car_Cascade, scale, count);
+                //detectAndDraw(frame3, car_Cascade, scale, count);
+                //detectAndDraw(frame4, car_Cascade, scale, count);
                 //frame1
-                CvInvoke.Imshow("cam1", frame1);
+                //CvInvoke.Imshow("cam1", frame1);
+                
             }
+            
         }
+
         void detectAndDraw(Mat frame, CascadeClassifier cascade, double scale, int count)
         {
             List<Rectangle> cars = new List<Rectangle>();
@@ -92,7 +100,10 @@ namespace Super_Pecan_Pie
                 //count++;
                 //cout << "car Detected: #" << count;
             }
-            CvInvoke.Imshow("cam1", frame);
+            //CvInvoke.Imshow("cam1", frame);
+            //ImageViewer.Show(frame);
+            
+            
         }
     }
 }
