@@ -12,6 +12,12 @@ namespace Super_Pecan_Pie
 {
     public class functions1
     {
+            public string ReadFile(string filename)
+        {
+            string API_key = File.ReadAllText("API_key.txt");
+            return API_key;
+        }
+
         public RootObject API_Call(string APIREQUEST)// Sends API request and Deserializes it into the classes
         {
             var client = new WebClient();
@@ -22,7 +28,8 @@ namespace Super_Pecan_Pie
         public string API_request(GeoCoordinate coord, string destination)// Takes current location (in lng and lat) and then a destination and returns a string API Reuqes
         {
             string APIREQUEST;
-            APIREQUEST = "https://maps.googleapis.com/maps/api/directions/json?origin=" + coord.Latitude + "," + coord.Longitude + "&destination=" + destination + "&key=AIzaSyDJGo7ro2PGGshDBfo5epne5AvpynhRjTs";
+            string API_key = ReadFile("API_key.txt");
+            APIREQUEST = "https://maps.googleapis.com/maps/api/directions/json?origin=" + coord.Latitude + "," + coord.Longitude + "&destination=" + destination + "&key=" + API_key;
             return APIREQUEST;
         }
         public DistanceManeuver[] DirectionFetch(RootObject directions) // returns array of  direction and maneuver of next step
@@ -53,22 +60,15 @@ namespace Super_Pecan_Pie
             return Location;
         }
 
-        public   GeoCoordinate GetLocation()
+        public GeoCoordinate GetLocation(object sender,EventArgs e)
         {
             var watcher = new GeoCoordinateWatcher();
-
-            // Do not suppress prompt, and wait 1000 milliseconds to start.
-            watcher.TryStart(false , TimeSpan.FromMilliseconds(1000));
-
+            watcher.Start();
             GeoCoordinate coord = watcher.Position.Location;
+            watcher.Stop();
             return coord;
         }
-
-
-
-
-
-
+ 
         public void test()// This needs to be implemented into GUI
         {
             //string textBoxContents = textBox1.Text;
