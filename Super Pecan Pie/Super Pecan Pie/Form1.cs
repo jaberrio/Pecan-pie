@@ -37,6 +37,11 @@ namespace Super_Pecan_Pie
             });
             viewer.ShowDialog();
         }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
     
 }
