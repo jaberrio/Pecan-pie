@@ -33,7 +33,7 @@ namespace Super_Pecan_Pie
             VideoCapture capture = new VideoCapture();
             Application.Idle += new EventHandler(delegate (object ss, EventArgs ee)
             {
-                viewer.Image = capture.QueryFrame();
+               viewer.Image = capture.QueryFrame();
             });
             viewer.ShowDialog();
         }
