@@ -5,6 +5,8 @@ using System.Drawing;
 using System.Windows.Forms;
 using System;
 using System.Collections.Generic;
+using System.Speech.Recognition;
+using System.Speech.Synthesis;
 
 namespace Super_Pecan_Pie
 {
@@ -14,9 +16,7 @@ namespace Super_Pecan_Pie
 
         public Form1()
         {
-            InitializeComponent();
-
-            
+            InitializeComponent();            
         }
 
 
@@ -42,6 +42,30 @@ namespace Super_Pecan_Pie
             CascadeClassifier c = new CascadeClassifier("Files/cars.xml");*/
         }
 
+        private void speechtest(object sender, EventArgs e)
+        {
+            SpeechRecognize recognizerA = new SpeechRecognize();
+            recognizerA.recognizeB.SpeechRecognized += recognize_SpeechRecognized;
+        }
+        void recognize_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
+        { 
+            switch (e.Result.Text)
+            {
+                case "test":
+                    Console.WriteLine("Success");
+                    break;
+
+                case "hello":
+                    Console.WriteLine("hello heard");
+                    break;
+
+            }
+        }
+
+        private void synthesistest(object sender, EventArgs e)
+        {
+            SpeechSynthesize synthesizerA = new SpeechSynthesize();
+        }
         private void vidFeed_Click(object sender, EventArgs e)
         {
             openCV f = new openCV();
