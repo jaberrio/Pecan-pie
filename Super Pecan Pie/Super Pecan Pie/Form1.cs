@@ -15,10 +15,14 @@ namespace Super_Pecan_Pie
         public Form1()
         {
             InitializeComponent();
+            openCV i = new openCV();
+            i.findImages();
         }
 
         private void label1_Click(object sender, EventArgs e)
         {
+            
+            
 
         }
     }
