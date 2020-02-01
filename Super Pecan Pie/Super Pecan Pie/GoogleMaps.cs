@@ -16,7 +16,7 @@ namespace Super_Pecan_Pie
         {
             var client = new WebClient();
             var content = client.DownloadString(APIREQUEST);
-            RootObject directions = JsonConvert.DeserializeObject<RootObject>(content);
+            RootObject directions = Newtonsoft.Json.JsonConvert.DeserializeObject<RootObject>(content);
             return directions;
         }
         public string API_request(GeoCoordinate coord, string destination)// Takes current location (in lng and lat) and then a destination and returns a string API Reuqes
