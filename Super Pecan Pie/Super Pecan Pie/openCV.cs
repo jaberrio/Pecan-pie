@@ -16,28 +16,42 @@ namespace Super_Pecan_Pie
         public void findImages()
         {
 
-            //Image<Bgr, Byte> frame1;
-            Mat frame1 = new Mat();
-            //IImage frame1 = new Mat();
-            //Mat frame2;
-            //Mat frame3 = new Mat();
-            //Mat frame4 = new Mat();
             double scale = 5;
             int count = 0;
-            
-           
-
-            VideoCapture vid1 = new VideoCapture(0);
-            //VideoCapture vid2 = new VideoCapture(0);
-            //VideoCapture vid3 = new VideoCapture(2);
-            //VideoCapture vid4 = new VideoCapture(3);
-
 
             CascadeClassifier car_Cascade = new CascadeClassifier("Resources/cars.xml");
             if (!vid1.IsOpened)
             {
                 Console.WriteLine("v1 video not read");
             }
+
+
+            ImageViewer viewer = new ImageViewer();
+            VideoCapture capture = new VideoCapture(0);
+            Application.Idle += new EventHandler(delegate (object ss, EventArgs ee)
+            {
+                detectAndDraw(viewer, car_Cascade, scale, count);
+
+                
+            });
+            viewer.ShowDialog();
+            //Mat frame1 = new Mat();
+            //IImage frame1 = new Mat();
+            //Mat frame2;
+            //Mat frame3 = new Mat();
+            //Mat frame4 = new Mat();
+            //double scale = 5;
+            //int count = 0;
+            
+           
+
+            //VideoCapture vid1 = new VideoCapture(0);
+            //VideoCapture vid2 = new VideoCapture(0);
+            //VideoCapture vid3 = new VideoCapture(2);
+            //VideoCapture vid4 = new VideoCapture(3);
+
+
+            
             /*if (!vid2.IsOpened)
             {
                 Console.WriteLine("v2 video not read");
@@ -50,7 +64,7 @@ namespace Super_Pecan_Pie
             {
                 Console.WriteLine("v4 video not read");
             }*/
-            ImageViewer m_frmSourceImage = new ImageViewer(frame1, "Original Image");
+            /*ImageViewer m_frmSourceImage = new ImageViewer(frame1, "Original Image");
             while (true)
             {
                 vid1.Read(frame1);
@@ -66,7 +80,7 @@ namespace Super_Pecan_Pie
                 //frame1
                 //CvInvoke.Imshow("cam1", frame1);
                 
-            }
+            }*/
             
         }
 
@@ -102,8 +116,8 @@ namespace Super_Pecan_Pie
             }
             //CvInvoke.Imshow("cam1", frame);
             //ImageViewer.Show(frame);
-            
-            
+
+            viewer.Image = capture.QueryFrame();
         }
     }
 }
