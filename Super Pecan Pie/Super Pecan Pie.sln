@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Super Pecan Pie", "Super Pecan Pie\Super Pecan Pie.csproj", "{621A466A-39EE-418D-8F6B-1EA2C34EFE8F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{621A466A-39EE-418D-8F6B-1EA2C34EFE8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{621A466A-39EE-418D-8F6B-1EA2C34EFE8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{621A466A-39EE-418D-8F6B-1EA2C34EFE8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{621A466A-39EE-418D-8F6B-1EA2C34EFE8F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {55F167BC-0610-43B1-8489-B670968B0019}
+	EndGlobalSection
+EndGlobal
