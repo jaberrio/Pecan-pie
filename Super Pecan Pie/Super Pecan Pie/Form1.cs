@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System;
 using System.Collections.Generic;
 using System.Speech.Recognition;
+using System.Speech.Synthesis;
 
 namespace Super_Pecan_Pie
 {
@@ -15,9 +16,7 @@ namespace Super_Pecan_Pie
 
         public Form1()
         {
-            InitializeComponent();
-
-            
+            InitializeComponent();            
         }
 
 
@@ -44,7 +43,6 @@ namespace Super_Pecan_Pie
             SpeechRecognize recognizerA = new SpeechRecognize();
             recognizerA.recognizeB.SpeechRecognized += recognize_SpeechRecognized;
         }
-
         void recognize_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
         { 
             switch (e.Result.Text)
@@ -58,6 +56,11 @@ namespace Super_Pecan_Pie
                     break;
 
             }
+        }
+
+        private void synthesistest(object sender, EventArgs e)
+        {
+            SpeechSynthesize synthesizerA = new SpeechSynthesize();
         }
     }
     
