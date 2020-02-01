@@ -7,6 +7,7 @@ using Emgu.CV;
 using System.Drawing;
 using Emgu.CV.Structure;
 using Emgu.CV.UI;
+using System.Windows.Forms;
 
 namespace Super_Pecan_Pie
 {
@@ -15,26 +16,32 @@ namespace Super_Pecan_Pie
 
         public void findImages()
         {
-
+            
             double scale = 5;
             int count = 0;
 
-            CascadeClassifier car_Cascade = new CascadeClassifier("Resources/cars.xml");
-            if (!vid1.IsOpened)
-            {
-                Console.WriteLine("v1 video not read");
-            }
+            CascadeClassifier car_Cascade = new CascadeClassifier("Files/cars.xml");
+            /* if (!vid1.IsOpened)
+             {
+                 Console.WriteLine("v1 video not read");
+             }*/
 
 
             ImageViewer viewer = new ImageViewer();
             VideoCapture capture = new VideoCapture(0);
+            Mat frame = capture.QueryFrame();
+
             Application.Idle += new EventHandler(delegate (object ss, EventArgs ee)
             {
-                detectAndDraw(viewer, car_Cascade, scale, count);
-
                 
+                
+                capture.Read(frame);
+                //viewer.Image = capture.QueryFrame();
+                detectAndDraw( frame, car_Cascade, scale, count,viewer);
+
+
             });
-            viewer.ShowDialog();
+            
             //Mat frame1 = new Mat();
             //IImage frame1 = new Mat();
             //Mat frame2;
@@ -84,9 +91,9 @@ namespace Super_Pecan_Pie
             
         }
 
-        void detectAndDraw(Mat frame, CascadeClassifier cascade, double scale, int count)
+        void detectAndDraw(Mat frame,CascadeClassifier cascade, double scale, int count, ImageViewer viewer)
         {
-            List<Rectangle> cars = new List<Rectangle>();
+            Rectangle[] cars = new Rectangle[100];
             Mat gray = new Mat();
             Mat smallImg = new Mat();
             CvInvoke.CvtColor(frame, gray, Emgu.CV.CvEnum.ColorConversion.Bgr2Gray);
@@ -95,29 +102,56 @@ namespace Super_Pecan_Pie
             CvInvoke.Resize(gray, smallImg, new Size(gray.Width, gray.Height), fx, fx, Emgu.CV.CvEnum.Inter.Linear);
             CvInvoke.EqualizeHist(smallImg, smallImg);
             Size s = new Size(30, 30);
-            cascade.DetectMultiScale(smallImg, 1.1, 2, s);
+            cars = cascade.DetectMultiScale(smallImg, 1.1, 2, s);
 
             for (int i = 0; i < cars.Count(); i++)
             {
-                CvInvoke.Rectangle(frame, cars.ElementAt(i), new MCvScalar(0, 255, 0));
-                //Rectangle r = cars[i];
-                //Mat smallImgROI;
-                //MCvScalar color = new MCvScalar(255, 0, 0); // Color for Drawing tool 
+                    Rectangle r = cars[i];
+                    Mat smallImgROI;
+                    // Color for Drawing tool 
 
-                //double aspect_ratio = (double)r.width / r.height;
+                    double aspect_ratio = (double)r.Width / r.Height;
 
-                //Rectangle(frame,
-                //Point(cvRound(r.x * scale), cvRound(r.y * scale)),
-                //Point(cvRound((r.x + r.width - 1) * scale), cvRound((r.y + r.height - 1) * scale)),
-                //color, 3, 8, 0);
+                /*Rectangle(frame,
+                    Point(cvRound(r.x * scale), cvRound(r.y * scale)),
+                    Point(cvRound((r.x + r.width - 1) * scale), cvRound((r.y + r.height - 1) * scale)),
+                    color, 3, 8, 0);*/
+                CvInvoke.Rectangle(frame, cars.ElementAt(i), new MCvScalar(255, 0, 0));
                 //smallImgROI = smallImg(r);
                 //count++;
                 //cout << "car Detected: #" << count;
+                smallImgROI = smallImg.T();
             }
-            //CvInvoke.Imshow("cam1", frame);
+
+
+
+
+
+
+
+
+
+
+            //CvInvoke.Rectangle(frame, cars.ElementAt(i), new MCvScalar(0, 255, 0));
+            //Rectangle r = cars[i];
+            //Mat smallImgROI;
+            //MCvScalar color = new MCvScalar(255, 0, 0); // Color for Drawing tool 
+
+            //double aspect_ratio = (double)r.width / r.height;
+
+            //Rectangle(frame,
+            //Point(cvRound(r.x * scale), cvRound(r.y * scale)),
+            //Point(cvRound((r.x + r.width - 1) * scale), cvRound((r.y + r.height - 1) * scale)),
+            //color, 3, 8, 0);
+            //smallImgROI = smallImg(r);
+            //count++;
+            //cout << "car Detected: #" << count;
+            //viewer.ShowDialog();
+            CvInvoke.Imshow("cam1", frame);
             //ImageViewer.Show(frame);
 
-            viewer.Image = capture.QueryFrame();
+            //viewer.Image = capture.QueryFrame();
+
         }
     }
 }

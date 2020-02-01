@@ -29,6 +29,9 @@ namespace Super_Pecan_Pie
 
         private void label1_Click(object sender, EventArgs e)
         {
+            
+
+            /*
             ImageViewer viewer = new ImageViewer();
             VideoCapture capture = new VideoCapture();
             Application.Idle += new EventHandler(delegate (object ss, EventArgs ee)
@@ -36,6 +39,7 @@ namespace Super_Pecan_Pie
                viewer.Image = capture.QueryFrame();
             });
             viewer.ShowDialog();
+            CascadeClassifier c = new CascadeClassifier("Files/cars.xml");*/
         }
 
         private void speechtest(object sender, EventArgs e)
@@ -61,6 +65,11 @@ namespace Super_Pecan_Pie
         private void synthesistest(object sender, EventArgs e)
         {
             SpeechSynthesize synthesizerA = new SpeechSynthesize();
+        }
+        private void vidFeed_Click(object sender, EventArgs e)
+        {
+            openCV f = new openCV();
+            f.findImages();
         }
     }
     
