@@ -7,6 +7,7 @@ using System.Net;
 using Newtonsoft.Json;
 using System.Web.Script.Serialization;
 using System.IO;
+using System.Device.Location;
 
 namespace Super_Pecan_Pie
 {
@@ -19,10 +20,10 @@ namespace Super_Pecan_Pie
             RootObject directions = JsonConvert.DeserializeObject<RootObject>(content);
             return directions;
         }
-        public string API_request(double lat , double lng , string destination)// Takes current location (in lng and lat) and then a destination and returns a string API Reuqes
+        public string API_request(GeoCoordinate coord, string destination)// Takes current location (in lng and lat) and then a destination and returns a string API Reuqes
         {
             string APIREQUEST;
-            APIREQUEST = "https://maps.googleapis.com/maps/api/directions/json?origin=" + lat + "," + lng + "&Destination=" + destination + "&key=AIzaSyDJGo7ro2PGGshDBfo5epne5AvpynhRjTs";
+            APIREQUEST = "https://maps.googleapis.com/maps/api/directions/json?origin=" + coord.Latitude + "," + coord.Longitude + "&destination=" + destination + "&key=AIzaSyDJGo7ro2PGGshDBfo5epne5AvpynhRjTs";
             return APIREQUEST;
         }
         public DistanceManeuver[] DirectionFetch(RootObject directions) // returns array of  direction and maneuver of next step
@@ -53,6 +54,22 @@ namespace Super_Pecan_Pie
             return Location;
         }
 
+        public   GeoCoordinate GetLocation()
+        {
+            var watcher = new GeoCoordinateWatcher();
+
+            // Do not suppress prompt, and wait 1000 milliseconds to start.
+            watcher.TryStart(false , TimeSpan.FromMilliseconds(1000));
+
+            GeoCoordinate coord = watcher.Position.Location;
+            return coord;
+        }
+
+
+
+
+
+
         public void test()// This needs to be implemented into GUI
         {
             //string textBoxContents = textBox1.Text;
@@ -66,7 +83,7 @@ namespace Super_Pecan_Pie
 
 
             int i = 0;
-            while(startlocation[i] != null)
+            while(startlocation[i] != null)//Prints starting lats and longs per step
             {
 
                 Console.WriteLine(startlocation[i].lat + " " + startlocation[i].lng);
@@ -74,7 +91,7 @@ namespace Super_Pecan_Pie
 
             }
             int k = 0;
-            while(steps1[k] != null)
+            while(steps1[k] != null) // prints distance and maneuver of next step
             {
                 Console.WriteLine(steps1[k].distance + " " + steps1[k].maneuver);
                 k++;
