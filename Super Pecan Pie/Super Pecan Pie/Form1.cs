@@ -31,17 +31,13 @@ namespace Super_Pecan_Pie
         {
             ImageViewer viewer = new ImageViewer();
             VideoCapture capture = new VideoCapture();
-            Application.Idle += new EventHandler(delegate (object sender, EventArgs e)
+            Application.Idle += new EventHandler(delegate (object ss, EventArgs ee)
             {
                 viewer.Image = capture.QueryFrame();
             });
             viewer.ShowDialog();
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
     }
     
 }
