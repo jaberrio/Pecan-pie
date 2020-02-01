@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System;
 using System.Collections.Generic;
+using System.Speech.Recognition;
 
 namespace Super_Pecan_Pie
 {
@@ -38,6 +39,26 @@ namespace Super_Pecan_Pie
             viewer.ShowDialog();
         }
 
+        private void speechtest(object sender, EventArgs e)
+        {
+            SpeechRecognize recognizerA = new SpeechRecognize();
+            recognizerA.recognizeB.SpeechRecognized += recognize_SpeechRecognized;
+        }
+
+        void recognize_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
+        { 
+            switch (e.Result.Text)
+            {
+                case "test":
+                    Console.WriteLine("Success");
+                    break;
+
+                case "hello":
+                    Console.WriteLine("hello heard");
+                    break;
+
+            }
+        }
     }
     
 }
