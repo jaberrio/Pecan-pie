@@ -12,7 +12,7 @@ namespace Super_Pecan_Pie
 {
     public class functions1
     {
-            public string ReadFile(string filename)
+        public string ReadFile(string filename)
         {
             string API_key = File.ReadAllText("API_key.txt");
             return API_key;
@@ -36,13 +36,13 @@ namespace Super_Pecan_Pie
         {
             int i = 0;
             var DistanceManeuver = new DistanceManeuver[1000];
-            foreach(var route in directions.routes)
-                foreach(var legs in route.legs)
-                    foreach(var steps in legs.steps)
+            foreach (var route in directions.routes)
+                foreach (var legs in route.legs)
+                    foreach (var steps in legs.steps)
                     {
                         var DistanceManeuvertemp = new DistanceManeuver
                         {
-                            maneuver = steps.maneuver ,
+                            maneuver = steps.maneuver,
                             distance = steps.distance.text
                         };
                         DistanceManeuver[i++] = DistanceManeuvertemp;
@@ -53,18 +53,18 @@ namespace Super_Pecan_Pie
         {
             int i = 0;
             var Location = new StartLocation2[10000];
-            foreach(var route in directions.routes)
-                foreach(var legs in route.legs)
-                    foreach(var steps in legs.steps)
+            foreach (var route in directions.routes)
+                foreach (var legs in route.legs)
+                    foreach (var steps in legs.steps)
                         Location[i++] = steps.start_location;
             return Location;
         }
 
-        public List<StartLocation2> CordFetchExtra(RootObject direction, float distenceStep,StartLocation2 currtLoc)
+        public List<GeoCoordinate> CordFetchExtra(RootObject direction, float distenceStep, GeoCoordinate currtLoc)
         {
-            List<StartLocation2> rtn = new List<StartLocation2>();
+            List<GeoCoordinate> rtn = new List<GeoCoordinate>();
             List<StartLocation2> use = CoordFetch(direction).ToList();
-            
+
             var e = use.GetEnumerator();
             var pre = e.Current;
             while (e.MoveNext())
@@ -72,7 +72,7 @@ namespace Super_Pecan_Pie
                 var Deltalat = e.Current.lat - pre.lat;
                 var Deltalon = e.Current.lng - pre.lng;
                 var Distance = Math.Sqrt(Math.Pow(Deltalat, 2) + Math.Pow(Deltalon, 2)); //hyp
-                var Step     = Distance / distenceStep;
+                var Step = Distance / distenceStep;
 
                 var tempNumLat = Deltalat / Step;
                 var tempNumLng = Deltalon / Step;
@@ -83,9 +83,9 @@ namespace Super_Pecan_Pie
                 {
                     Deltalat += tempNumLat;
                     Deltalon += tempNumLng;
-                    StartLocation2 temp = new StartLocation2();
-                    temp.lat = Deltalat;
-                    temp.lng = Deltalon;
+                    GeoCoordinate temp = new GeoCoordinate();
+                    temp.Latitude = Deltalat;
+                    temp.Longitude = Deltalon;
                     //float z = (float)(Step * Math.Atan(Deltalon / Deltalat));
                     //temp.lat = e.Current.lat + z;
                     //temp.lng = temp.lat * slope;
@@ -95,7 +95,7 @@ namespace Super_Pecan_Pie
 
                 pre = e.Current;
             }
-            
+
             return rtn;
         }
 
@@ -121,6 +121,35 @@ namespace Super_Pecan_Pie
             }
         }
 
+        public List<GeoCoordinate> SearchDangerZones(RootObject directions, List<Accident> POI)
+        {
+            var functions = new functions1();
+            List<GeoCoordinate> DangerZonePoints = new List<GeoCoordinate>();
+            List<GeoCoordinate> Extrapolated = new List<GeoCoordinate>();
+            GeoCoordinate coord = new GeoCoordinate();
+            coord = functions1.GetLocationProperty();
+            //Need step distance
+            Extrapolated = functions.CordFetchExtra(directions, .014619f, coord);
+
+            foreach (var item in Extrapolated)
+            {
+                foreach (var item2 in POI)
+                {
+                    if (item.Latitude - 0.014619 < item2.Lat && item.Latitude + 0.014619 > item2.Lat)
+                    {
+                        if (item.Longitude - 0.014619 < item2.Lon && item.Longitude + 0.014619 > item2.Lon)
+                        {
+                            DangerZonePoints.Add(item);
+                        }
+                    }
+                }
+
+            }
+            return DangerZonePoints;
+        }
+
+
+
 
         void test()// This needs to be implemented into GUI
         {
@@ -134,11 +163,11 @@ namespace Super_Pecan_Pie
             startlocation = functions.CoordFetch(directions);
 
             //Stepped4ActDataB
-            
+
 
 
             int i = 0;
-            while(startlocation[i] != null)//Prints starting lats and longs per step
+            while (startlocation[i] != null)//Prints starting lats and longs per step
             {
 
                 Console.WriteLine(startlocation[i].lat + " " + startlocation[i].lng);
@@ -146,14 +175,14 @@ namespace Super_Pecan_Pie
 
             }
             int k = 0;
-            while(steps1[k] != null) // prints distance and maneuver of next step
+            while (steps1[k] != null) // prints distance and maneuver of next step
             {
                 Console.WriteLine(steps1[k].distance + " " + steps1[k].maneuver);
                 k++;
             }
 
         }
-
+    }
         public class DistanceManeuver
         {
             public string maneuver;
@@ -285,5 +314,5 @@ namespace Super_Pecan_Pie
             public List<Route> routes { get; set; }
             public string status { get; set; }
         }
-    }
+    
 }
