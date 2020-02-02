@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Device.Location;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ namespace Super_Pecan_Pie
     {
         public static int x, y;
         public static int state = 3;
+        public static int substate = 3;
         public static bool trig;
         static DateTime now = DateTime.Now;
         static DateTime pre = DateTime.Now;
@@ -34,28 +36,59 @@ namespace Super_Pecan_Pie
                     //Left 
                     if (joyX > 256)
                     {
-                        Console.WriteLine("JOYX > 256");
-                        state = 0;
+                        if (trig)
+                        {
+                            substate = 0;
+                        } else
+                        {
+                            Console.WriteLine("JOYX > 256");
+                            trig = true;
+                            state = 0;
+                        }
                     }
                     //Right
                     if (joyX < -256)
                     {
-                        Console.WriteLine("JOYX < -256");
-                        state = 2;
+                        if (trig)
+                        {
+                            substate = 2;
+                        }
+                        else
+                        {
+                            Console.WriteLine("JOYX < -256");
+                            trig = true;
+                            state = 2;
+                        }
                     }
 
                     //Up
                     if (joyY > 256)
                     {
-                        Console.WriteLine("JOYY > 256");
-                        state = 1;
+                        if (trig)
+                        {
+                            substate = 1;
+                        }
+                        else
+                        {
+                            Console.WriteLine("JOYY > 256");
+                            trig = true;
+                            state = 1;
+                        }
                     }
                     //Down
                     if (joyY < -256)
                     {
-                        Console.WriteLine("JOYY < =256");
-                        //CAPTURE AND RETURN
-                        state = 3;
+                        if (trig)
+                        {
+                            substate = 3;
+                            state = 3;
+                        }
+                        else
+                        {
+                            Console.WriteLine("JOYY < =256");
+                            trig = false;
+                            state = 3;
+                        }
                     }
                 }
             }
@@ -73,18 +106,43 @@ namespace Super_Pecan_Pie
             g.DrawString(up[state], f, Brushes.Red, x+45, y );
             g.DrawString(right[state], f, Brushes.Red, x + 120, y + 60);
 
-            
-            switch (state)
+            string[] food = { "1405+SW+13th+St+Gainesville", "3410+SW+Archer+Rd+Gainesville", "1404+W.+Univeresity+Avenue+suites+Gainesville+FL" };
+            string[] fun = { "6419+W+NewBerry+Rd+Gainsville", "6000+Universal+Blvd+Orlando", "2606+NE+Waldo+Rd+Gainesville" };
+
+            if (trig)
             {
-                case 0:
-                    break;
-                case 1:
-                    break;
-                case 2:
-                    break;
-                default:
-                    break;
+                switch (state)
+                {
+                    case 0:
+                        //Call someone
+                        trig = false;
+                        state = 3;
+                        substate = 3;
+                        break;
+                    case 1:
+                        var functions = new functions1();
+                        GeoCoordinate coord = functions1.GetLocationProperty();
+                        string APIREQUEST = functions.API_request(coord, food[substate]);
+                        ActDataB dataB = new ActDataB();
+                        List<Accident> danger = dataB.dangerSpots();
+                        functions.API_Call(APIREQUEST, danger);
+                        trig = false;
+                        state = 3;
+                        substate = 3;
+                        break;
+                    case 2:
+                        trig = false;
+                        state = 3;
+                        substate = 3;
+                        break;
+                    default:
+                        state = 3;
+                        substate = 3;
+                        trig = false;
+                        break;
+                }
             }
+            
         }
     }
 }
