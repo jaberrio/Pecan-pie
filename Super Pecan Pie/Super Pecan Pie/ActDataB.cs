@@ -96,11 +96,27 @@ namespace Super_Pecan_Pie
                     //break;
                 }
             }
-            for (int i = lowerB; i <= upperB; i++)
+            for (int i = lowerB; i < upperB; i++)
             {
                 rtn.Add(temp[i]);
             }
             return rtn;
+        }
+
+        public void findCrashesForAllPoints()
+        {
+            StreamWriter fr = new StreamWriter("CrashNums.csv");
+
+            var temp = 0;
+            foreach(var accident in act)
+            {
+                temp = getAccidentsNearBy(accident.Lat, accident.Lon, 0.01455541f).Count;
+                fr.WriteLine(temp);
+                fr.AutoFlush = true;
+            }
+            //Console.WriteLine(act.Count);
+            //List<Accident> temp = new List<Accident>();
+
         }
     }
 }
