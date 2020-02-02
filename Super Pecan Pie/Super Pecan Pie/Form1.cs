@@ -27,10 +27,8 @@ namespace Super_Pecan_Pie
         {
             ActDataB dataB = new ActDataB();
             List<Accident> test = dataB.getAccidentsNearBy(29.626945f, -82.372390f, 0.02414016f);
-
-            dataB.findCrashesForAllPoints();
-
-
+            List<Accident> danger = dataB.dangerSpots();
+            //dataB.findCrashesForAllPoints();
 
         }
 
