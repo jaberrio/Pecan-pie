@@ -173,11 +173,11 @@ namespace Super_Pecan_Pie
             Application.Idle += new EventHandler(delegate (object ss, EventArgs ee)
             {
 
-
-                capture1.Read(frame1);
-                capture2.Read(frame2);
-                capture3.Read(frame3);
-                capture4.Read(frame4);
+                    capture1.Read(frame1);
+                    capture2.Read(frame2);
+                    capture3.Read(frame3);
+                    capture4.Read(frame4);
+                
                 //viewer.Image = capture.QueryFrame();
                 detect(frame1, car_Cascade, scale, count, "cam1",f);
                 detect(frame2, car_Cascade, scale, count, "cam2",f);
@@ -198,7 +198,7 @@ namespace Super_Pecan_Pie
 
             CvInvoke.Resize(gray, smallImg, new Size(gray.Width, gray.Height), fx, fx, Emgu.CV.CvEnum.Inter.Linear);
             CvInvoke.EqualizeHist(smallImg, smallImg);
-            Size d = new Size(150, 150);
+            Size d = new Size(125, 125);
             cars = car_Cascade.DetectMultiScale(smallImg, 1.1, 3, d);
             
             if(cars.Count() >= 1)
