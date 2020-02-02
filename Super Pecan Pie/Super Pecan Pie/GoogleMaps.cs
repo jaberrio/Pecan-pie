@@ -28,10 +28,8 @@ namespace Super_Pecan_Pie
             var functions = new functions1();
             List<GeoCoordinate> Extrap = new List<GeoCoordinate>();
             List<GeoCoordinate> PrevLoc = functions.CoordFetch(directions);
-
             Extrap = CordFetchExtra(directions, .014619f, currLoc);
             DangerZones = SearchDangerZones(Extrap, _danger, PrevLoc, currLoc);
-            Console.WriteLine(functions.TotalDuration(directions));
             return directions;
         }
         public string API_request(GeoCoordinate coord, string destination)// Takes current location (in lng and lat) and then a destination and returns a string API Reuqes
@@ -41,10 +39,10 @@ namespace Super_Pecan_Pie
             APIREQUEST = "https://maps.googleapis.com/maps/api/directions/json?origin=" + coord.Latitude + "," + coord.Longitude + "&destination=" + destination + "&key=" + API_key;
             return APIREQUEST;
         }
-        public DistanceManeuver[] DirectionFetch(RootObject directions) // returns array of  direction and maneuver of next step
+        public List<DistanceManeuver> DirectionFetch(RootObject directions) // returns array of  direction and maneuver of next step
         {
             int i = 0;
-            var DistanceManeuver = new DistanceManeuver[1000];
+            List<DistanceManeuver> distanceManeuvers= new List<DistanceManeuver>();
             foreach (var route in directions.routes)
                 foreach (var legs in route.legs)
                     foreach (var steps in legs.steps)
@@ -54,9 +52,9 @@ namespace Super_Pecan_Pie
                             maneuver = steps.maneuver,
                             distance = steps.distance.text
                         };
-                        DistanceManeuver[i++] = DistanceManeuvertemp;
+                        distanceManeuvers.Add(DistanceManeuvertemp);
                     }
-            return DistanceManeuver;
+            return distanceManeuvers;
         }
         public List<GeoCoordinate> CoordFetch(RootObject directions) //  Returns array that holds coords of start Location of next step.
         {
