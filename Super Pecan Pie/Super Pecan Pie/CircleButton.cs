@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Speech.Synthesis;
 
 namespace Super_Pecan_Pie
 {
@@ -19,8 +20,9 @@ namespace Super_Pecan_Pie
         static DateTime pre = DateTime.Now;
 
         static Font f = new Font(FontFamily.GenericSerif, 18, FontStyle.Bold);
+        static SpeechSynthesize synthesizerA = new SpeechSynthesize();
 
-
+        
         static CircleButton()
         {
         }
@@ -30,7 +32,7 @@ namespace Super_Pecan_Pie
         {
             if (joyX != 0 || joyY != 0)
             {
-                if (DateTime.Now.Subtract(pre).TotalMilliseconds > 300)
+                if (DateTime.Now.Subtract(pre).TotalMilliseconds > 300)       //friends
                 {
                     pre = DateTime.Now.AddSeconds(2);
                     //Left 
@@ -38,6 +40,7 @@ namespace Super_Pecan_Pie
                     {
                         if (trig)
                         {
+                            synthesizerA.readDistanceMan("Friends", 4);
                             substate = 0;
                         }
                         else
@@ -48,10 +51,11 @@ namespace Super_Pecan_Pie
                         }
                     }
                     //Right
-                    if (joyX < -256)
+                    if (joyX < -256)                                    //fun
                     {
                         if (trig)
                         {
+                            synthesizerA.readDistanceMan("Fun", 4);
                             substate = 2;
                         }
                         else
@@ -63,10 +67,11 @@ namespace Super_Pecan_Pie
                     }
 
                     //Up
-                    if (joyY > 256)
+                    if (joyY > 256)                                  //food
                     {
                         if (trig)
                         {
+                            synthesizerA.readDistanceMan("Food", 4);
                             substate = 1;
                         }
                         else
