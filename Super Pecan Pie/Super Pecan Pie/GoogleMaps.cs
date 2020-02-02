@@ -60,13 +60,21 @@ namespace Super_Pecan_Pie
             return Location;
         }
 
-        public GeoCoordinate GetLocation(object sender,EventArgs e)
+        public void GetLocation()
         {
-            var watcher = new GeoCoordinateWatcher();
-            watcher.Start();
-            GeoCoordinate coord = watcher.Position.Location;
-            watcher.Stop();
-            return coord;
+            GeoCoordinateWatcher watcher;
+            watcher = new GeoCoordinateWatcher();
+
+            watcher.PositionChanged += (sender, e) =>
+            {
+                var coordinate = e.Position.Location;
+                Console.WriteLine("Lat: {0}, Long: {1}", coordinate.Latitude,
+                    coordinate.Longitude);
+                 
+                watcher.Stop(); 
+            };
+
+            
         }
  
         public void test()// This needs to be implemented into GUI
