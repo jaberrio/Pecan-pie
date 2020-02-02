@@ -37,7 +37,7 @@
             // 
             // serialPort1
             // 
-            this.serialPort1.PortName = "COM9";
+            this.serialPort1.PortName = "COM11";
             // 
             // timer1
             // 
@@ -49,10 +49,12 @@
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(1420, 902);
+            this.ClientSize = new System.Drawing.Size(2007, 1104);
             this.DoubleBuffered = true;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Form2";
             this.Text = "Form2";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Form2_Load);
             this.RegionChanged += new System.EventHandler(this.Form2_RegionChanged);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form2_Paint);
