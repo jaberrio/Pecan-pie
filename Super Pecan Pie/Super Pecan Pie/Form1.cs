@@ -18,6 +18,8 @@ namespace Super_Pecan_Pie
         public Form1()
         {
             InitializeComponent();
+            var otherWindow = new Form2();
+            otherWindow.Show();
         }
 
 
