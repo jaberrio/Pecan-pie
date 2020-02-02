@@ -45,9 +45,9 @@ namespace Super_Pecan_Pie
                 
                 
                 capture1.Read(frame1);
-                capture1.Read(frame2);
-                capture1.Read(frame3);
-                capture1.Read(frame4);
+                capture2.Read(frame2);
+                capture3.Read(frame3);
+                capture4.Read(frame4);
                 //viewer.Image = capture.QueryFrame();
                 detectAndDraw( frame1, car_Cascade, scale, count, "cam1");
                 detectAndDraw(frame2, car_Cascade, scale, count,"cam2");
@@ -63,7 +63,7 @@ namespace Super_Pecan_Pie
             //Mat frame3 = new Mat();
             //Mat frame4 = new Mat();
             //double scale = 5;
-            //int count = 0;
+            ////int count = 0;
             
            
 
@@ -108,7 +108,8 @@ namespace Super_Pecan_Pie
 
         void detectAndDraw(Mat frame,CascadeClassifier cascade, double scale, int count,string name)
         {
-            Rectangle[] cars = new Rectangle[100];
+            Rectangle[] cars = new Rectangle[15];
+            Rectangle[] cars2 = new Rectangle[8];
             Mat gray = new Mat();
             Mat smallImg = new Mat();
             CvInvoke.CvtColor(frame, gray, Emgu.CV.CvEnum.ColorConversion.Bgr2Gray);
@@ -117,58 +118,28 @@ namespace Super_Pecan_Pie
             CvInvoke.Resize(gray, smallImg, new Size(gray.Width, gray.Height), fx, fx, Emgu.CV.CvEnum.Inter.Linear);
             CvInvoke.EqualizeHist(smallImg, smallImg);
             Size s = new Size(40, 40);
-            cars = cascade.DetectMultiScale(smallImg, 1.1, 2, s);
+            Size d = new Size(150, 150);
+            cars = cascade.DetectMultiScale(smallImg, 1.1, 2, s, d);
+            cars2 = cascade.DetectMultiScale(smallImg, 1.1, 3, d);
             
 
             for (int i = 0; i < cars.Count(); i++)
             {
-                    Rectangle r = cars[i];
-                    Mat smallImgROI;
-                    // Color for Drawing tool 
-
-                    double aspect_ratio = (double)r.Width / r.Height;
-
-                /*Rectangle(frame,
-                    Point(cvRound(r.x * scale), cvRound(r.y * scale)),
-                    Point(cvRound((r.x + r.width - 1) * scale), cvRound((r.y + r.height - 1) * scale)),
-                    color, 3, 8, 0);*/
-                //cars.ElementAt(i).
-                CvInvoke.Rectangle(frame, cars.ElementAt(i), new MCvScalar(255, 0, 0));
-                //smallImgROI = smallImg(r);
-                //count++;
-                //cout << "car Detected: #" << count;
-                smallImgROI = smallImg.T();
+                Rectangle r = cars[i];
+                Mat smallImgROI;
+                double aspect_ratio = (double)r.Width / r.Height;
+                CvInvoke.Rectangle(frame, cars.ElementAt(i), new MCvScalar(255, 0, 0), thickness: 4);
+                smallImgROI = smallImg;
             }
-
-
-
-
-
-
-
-
-
-
-            //CvInvoke.Rectangle(frame, cars.ElementAt(i), new MCvScalar(0, 255, 0));
-            //Rectangle r = cars[i];
-            //Mat smallImgROI;
-            //MCvScalar color = new MCvScalar(255, 0, 0); // Color for Drawing tool 
-
-            //double aspect_ratio = (double)r.width / r.height;
-
-            //Rectangle(frame,
-            //Point(cvRound(r.x * scale), cvRound(r.y * scale)),
-            //Point(cvRound((r.x + r.width - 1) * scale), cvRound((r.y + r.height - 1) * scale)),
-            //color, 3, 8, 0);
-            //smallImgROI = smallImg(r);
-            //count++;
-            //cout << "car Detected: #" << count;
-            //viewer.ShowDialog();
+            for (int i = 0; i < cars2.Count(); i++)
+            {
+                Rectangle r = cars2[i];
+                Mat smallImgROI;
+                double aspect_ratio = (double)r.Width / r.Height;
+                CvInvoke.Rectangle(frame, cars2.ElementAt(i), new MCvScalar(0, 0, 255), thickness:4) ;
+                smallImgROI = smallImg;
+            }
             CvInvoke.Imshow(name, frame);
-            //ImageViewer.Show(frame);
-
-            //viewer.Image = capture.QueryFrame();
-
         }
     }
 }
