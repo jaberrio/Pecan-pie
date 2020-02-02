@@ -60,7 +60,6 @@ namespace Super_Pecan_Pie
         }
         public List<GeoCoordinate> CoordFetch(RootObject directions) //  Returns array that holds coords of start Location of next step.
         {
-            int i = 0;
             List<GeoCoordinate> Location = new List<GeoCoordinate>();
             foreach (var route in directions.routes)
                 foreach (var legs in route.legs)
