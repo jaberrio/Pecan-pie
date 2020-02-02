@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Speech.Synthesis;
 
 namespace Super_Pecan_Pie
 {
@@ -120,17 +121,24 @@ namespace Super_Pecan_Pie
                         substate = 3;
                         break;
                     case 1:
+                        //DIRECTIONS       FOOD
                         var functions = new functions1();
                         GeoCoordinate coord = functions1.GetLocationProperty();
                         string APIREQUEST = functions.API_request(coord, food[substate]);
                         ActDataB dataB = new ActDataB();
                         List<Accident> danger = dataB.dangerSpots();
-                        functions.API_Call(APIREQUEST, danger);
+                        RootObject directions = functions.API_Call(APIREQUEST, danger);
+
+                        SpeechSynthesize synthesizerA = new SpeechSynthesize();
+                        synthesizerA.readDistanceMan(food[substate], 1);
+                        synthesizerA.readDistanceMan(functions.TotalDuration(directions), 2);
+                        synthesizerA.readDistanceMan(functions.DangerZones.Count.ToString(), 3);
                         trig = false;
                         state = 3;
                         substate = 3;
                         break;
                     case 2:
+                        //FUN PLACES   DIRECIONS
                         trig = false;
                         state = 3;
                         substate = 3;
