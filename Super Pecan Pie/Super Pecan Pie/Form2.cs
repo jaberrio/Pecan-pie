@@ -47,9 +47,7 @@ namespace Super_Pecan_Pie
             int y=0;
             string a = "";
             g.Clear(Color.Black);
-            
-
-
+             
             if (serialPort1.IsOpen)
             {
                 try
@@ -57,16 +55,10 @@ namespace Super_Pecan_Pie
                     a = serialPort1.ReadLine();
                     x = int.Parse(a.Split(' ')[0]);
                     y = int.Parse(a.Split(' ')[1]);
-
-
-                }
-                catch
-                {
-
-                }
+                } catch { }
             }
-            g.FillEllipse(Brushes.White, Width / 6, Height / 2, 200 + x, 200 + y);
-            g.DrawString(System.DateTime.Now.ToString(), new Font(FontFamily.GenericSerif, 10), Brushes.White, 100, 100);
+            g.FillEllipse(Brushes.White,(Width / 12),Height - (Height / 4), 100, 100);
+            g.DrawString(System.DateTime.Now.ToString(), new Font(FontFamily.GenericSerif, 15), Brushes.White, 50, 50);
         }
     }
 }
