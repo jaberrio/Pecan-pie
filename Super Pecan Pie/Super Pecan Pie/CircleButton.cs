@@ -20,8 +20,8 @@ namespace Super_Pecan_Pie
         static DateTime pre = DateTime.Now;
 
         static Font f = new Font(FontFamily.GenericSerif, 18, FontStyle.Bold);
+        static SpeechSynthesize synthesizerA = new SpeechSynthesize();
 
-        
         static CircleButton()
         {
         }
@@ -31,7 +31,7 @@ namespace Super_Pecan_Pie
         {
             if (joyX != 0 || joyY != 0)
             {
-                if (DateTime.Now.Subtract(pre).TotalMilliseconds > 300)
+                if (DateTime.Now.Subtract(pre).TotalMilliseconds > 300)       //friends
                 {
                     pre = DateTime.Now.AddSeconds(2);
                     //Left 
@@ -39,6 +39,7 @@ namespace Super_Pecan_Pie
                     {
                         if (trig)
                         {
+                            synthesizerA.readDistanceMan("Friends", 4);
                             substate = 0;
                         } else
                         {
@@ -48,10 +49,11 @@ namespace Super_Pecan_Pie
                         }
                     }
                     //Right
-                    if (joyX < -256)
+                    if (joyX < -256)                                    //fun
                     {
                         if (trig)
                         {
+                            synthesizerA.readDistanceMan("Fun", 4);
                             substate = 2;
                         }
                         else
@@ -63,10 +65,11 @@ namespace Super_Pecan_Pie
                     }
 
                     //Up
-                    if (joyY > 256)
+                    if (joyY > 256)                                  //food
                     {
                         if (trig)
                         {
+                            synthesizerA.readDistanceMan("Food", 4);
                             substate = 1;
                         }
                         else
@@ -116,12 +119,15 @@ namespace Super_Pecan_Pie
                 {
                     case 0:
                         //Call someone
+                        
                         trig = false;
                         state = 3;
                         substate = 3;
                         break;
                     case 1:
                         //DIRECTIONS       FOOD
+                        synthesizerA.readDistanceMan("Food", 4);
+
                         var functions = new functions1();
                         GeoCoordinate coord = functions1.GetLocationProperty();
                         string APIREQUEST = functions.API_request(coord, food[substate]);
@@ -129,7 +135,6 @@ namespace Super_Pecan_Pie
                         List<Accident> danger = dataB.dangerSpots();
                         RootObject directions = functions.API_Call(APIREQUEST, danger);
 
-                        SpeechSynthesize synthesizerA = new SpeechSynthesize();
                         synthesizerA.readDistanceMan(food[substate], 1);
                         synthesizerA.readDistanceMan(functions.TotalDuration(directions), 2);
                         synthesizerA.readDistanceMan(functions.DangerZones.Count.ToString(), 3);
@@ -139,6 +144,7 @@ namespace Super_Pecan_Pie
                         break;
                     case 2:
                         //FUN PLACES   DIRECIONS
+                        synthesizerA.readDistanceMan("Fun", 4);
                         trig = false;
                         state = 3;
                         substate = 3;

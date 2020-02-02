@@ -20,6 +20,7 @@ namespace Super_Pecan_Pie
 
         public void readDistanceMan(String input, int key)
         {
+            input = input.Replace('+', ' ');
             String temp = "";
             switch (key)
             {
@@ -33,6 +34,7 @@ namespace Super_Pecan_Pie
                     synthesizerB.Speak("There are " + input + " dangerous zones on your journey.");
                     break;
                 case 4:
+                    synthesizerB.Speak(input);
                     break;
             }
             
