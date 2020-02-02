@@ -218,7 +218,6 @@ namespace Super_Pecan_Pie
             {
                 f.updateDriver(4);
             }
-            //Thread.Sleep();
         }
     }
 }
