@@ -12,26 +12,17 @@ namespace Super_Pecan_Pie
 {
     public class functions1
     {
-        public List<GeoCoordinate> DangerZones;
         public string ReadFile(string filename)
         {
             string API_key = File.ReadAllText("API_key.txt");
             return API_key;
         }
 
-        public RootObject API_Call(string APIREQUEST, List<Accident> _danger)// Sends API request and Deserializes it into the classes
+        public RootObject API_Call(string APIREQUEST)// Sends API request and Deserializes it into the classes
         {
             var client = new WebClient();
             var content = client.DownloadString(APIREQUEST);
             RootObject directions = Newtonsoft.Json.JsonConvert.DeserializeObject<RootObject>(content);
-            GeoCoordinate currLoc = functions1.GetLocationProperty();
-            var functions = new functions1();
-            List<GeoCoordinate> Extrap = new List<GeoCoordinate>();
-            List<GeoCoordinate> PrevLoc = functions.CoordFetch(directions);
-
-            Extrap = CordFetchExtra(directions, .014619f,currLoc);
-            DangerZones = SearchDangerZones(Extrap, _danger, PrevLoc, currLoc);
-            Console.WriteLine(functions.TotalDuration(directions));
             return directions;
         }
         public string API_request(GeoCoordinate coord, string destination)// Takes current location (in lng and lat) and then a destination and returns a string API Reuqes
@@ -58,39 +49,36 @@ namespace Super_Pecan_Pie
                     }
             return DistanceManeuver;
         }
-        public List<GeoCoordinate> CoordFetch(RootObject directions) //  Returns array that holds coords of start Location of next step.
+        public StartLocation2[] CoordFetch(RootObject directions) //  Returns array that holds coords of start Location of next step.
         {
             int i = 0;
-            List<GeoCoordinate> Location = new List<GeoCoordinate>();
+            var Location = new StartLocation2[10000];
             foreach (var route in directions.routes)
                 foreach (var legs in route.legs)
                     foreach (var steps in legs.steps)
-                    {
-                        GeoCoordinate temp = new GeoCoordinate();
-                        temp.Latitude = steps.start_location.lat;
-                        temp.Longitude = steps.start_location.lng;
-                        Location.Add(temp);
-                    }
-             
+                        Location[i++] = steps.start_location;
             return Location;
         }
 
-        public List<GeoCoordinate> CordFetchExtra(RootObject direction, float distenceStep,GeoCoordinate currLoc)
+        public List<GeoCoordinate> CordFetchExtra(RootObject direction, float distenceStep, GeoCoordinate currtLoc)
         {
             List<GeoCoordinate> rtn = new List<GeoCoordinate>();
-            List<GeoCoordinate> use = CoordFetch(direction).ToList();
+            List<StartLocation2> use = CoordFetch(direction).ToList();
 
-            var pre = currLoc;
-            foreach (var item in use)
+            var e = use.GetEnumerator();
+            var pre = e.Current;
+            while (e.MoveNext())
             {
-                var Deltalat = item.Latitude - pre.Latitude;
-                var Deltalon = item.Longitude - pre.Longitude;
+                var Deltalat = e.Current.lat - pre.lat;
+                var Deltalon = e.Current.lng - pre.lng;
                 var Distance = Math.Sqrt(Math.Pow(Deltalat, 2) + Math.Pow(Deltalon, 2)); //hyp
                 var Step = Distance / distenceStep;
 
                 var tempNumLat = Deltalat / Step;
                 var tempNumLng = Deltalon / Step;
 
+                //var slope = Deltalon / Deltalat;
+                //var temp = e.Current;
                 for (int i = 0; i < Step; i++)
                 {
                     Deltalat += tempNumLat;
@@ -98,10 +86,16 @@ namespace Super_Pecan_Pie
                     GeoCoordinate temp = new GeoCoordinate();
                     temp.Latitude = Deltalat;
                     temp.Longitude = Deltalon;
-                    pre = item;
+                    //float z = (float)(Step * Math.Atan(Deltalon / Deltalat));
+                    //temp.lat = e.Current.lat + z;
+                    //temp.lng = temp.lat * slope;
+
                     rtn.Add(temp);
                 }
+
+                pre = e.Current;
             }
+
             return rtn;
         }
 
@@ -127,11 +121,17 @@ namespace Super_Pecan_Pie
             }
         }
 
-        public List<GeoCoordinate> SearchDangerZones(List<GeoCoordinate> Extrapolated, List<Accident> POI, List<GeoCoordinate> PrevLoc, GeoCoordinate currLoc)
+        public List<GeoCoordinate> SearchDangerZones(RootObject directions, List<Accident> POI)
         {
+            var functions = new functions1();
             List<GeoCoordinate> DangerZonePoints = new List<GeoCoordinate>();
-            PrevLoc.Insert(0, currLoc);
-            foreach (var item in PrevLoc)
+            List<GeoCoordinate> Extrapolated = new List<GeoCoordinate>();
+            GeoCoordinate coord = new GeoCoordinate();
+            coord = functions1.GetLocationProperty();
+            //Need step distance
+            Extrapolated = functions.CordFetchExtra(directions, .014619f, coord);
+
+            foreach (var item in Extrapolated)
             {
                 foreach (var item2 in POI)
                 {
@@ -148,12 +148,39 @@ namespace Super_Pecan_Pie
             return DangerZonePoints;
         }
 
-        public string TotalDuration(RootObject directions)
+
+
+
+        void test()// This needs to be implemented into GUI
         {
-            foreach (var item in directions.routes)
-                foreach (var legs in item.legs)
-                    return legs.duration.text;
-            return "";
+            //string textBoxContents = textBox1.Text;
+            var functions = new functions1();
+            var directions = new RootObject();
+            var steps1 = new DistanceManeuver[1000];
+            var startlocation = new StartLocation2[10000];
+            //directions = functions.API_Call(textBoxContents);
+            steps1 = functions.DirectionFetch(directions);
+            startlocation = functions.CoordFetch(directions);
+
+            //Stepped4ActDataB
+
+
+
+            int i = 0;
+            while (startlocation[i] != null)//Prints starting lats and longs per step
+            {
+
+                Console.WriteLine(startlocation[i].lat + " " + startlocation[i].lng);
+                i++;
+
+            }
+            int k = 0;
+            while (steps1[k] != null) // prints distance and maneuver of next step
+            {
+                Console.WriteLine(steps1[k].distance + " " + steps1[k].maneuver);
+                k++;
+            }
+
         }
     }
         public class DistanceManeuver
