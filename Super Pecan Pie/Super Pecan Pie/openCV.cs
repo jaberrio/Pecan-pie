@@ -8,6 +8,7 @@ using System.Drawing;
 using Emgu.CV.Structure;
 using Emgu.CV.UI;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace Super_Pecan_Pie
 {
@@ -136,10 +137,89 @@ namespace Super_Pecan_Pie
                 Rectangle r = cars2[i];
                 Mat smallImgROI;
                 double aspect_ratio = (double)r.Width / r.Height;
-                CvInvoke.Rectangle(frame, cars2.ElementAt(i), new MCvScalar(0, 0, 255), thickness:4) ;
+                CvInvoke.Rectangle(frame, cars2.ElementAt(i), new MCvScalar(0, 0, 255), thickness: 4);
                 smallImgROI = smallImg;
+
             }
-            CvInvoke.Imshow(name, frame);
+                CvInvoke.Imshow(name, frame);
+        }
+        public void FindClose(Form2 f)
+        {
+            int scale = 5;
+            int count = 0;
+
+            CascadeClassifier car_Cascade = new CascadeClassifier("Files/cars.xml");
+            /* if (!vid1.IsOpened)
+             {
+                 Console.WriteLine("v1 video not read");
+             }*/
+
+
+            ImageViewer viewer1 = new ImageViewer();
+            ImageViewer viewer2 = new ImageViewer();
+            ImageViewer viewer3 = new ImageViewer();
+            ImageViewer viewer4 = new ImageViewer();
+            VideoCapture capture1 = new VideoCapture(1);
+            VideoCapture capture2 = new VideoCapture(2);
+            VideoCapture capture3 = new VideoCapture(3);
+            VideoCapture capture4 = new VideoCapture(4);
+            Mat frame1 = capture1.QueryFrame();
+            Mat frame2 = capture2.QueryFrame();
+            Mat frame3 = capture3.QueryFrame();
+            Mat frame4 = capture4.QueryFrame();
+
+            
+
+            Application.Idle += new EventHandler(delegate (object ss, EventArgs ee)
+            {
+
+
+                capture1.Read(frame1);
+                capture2.Read(frame2);
+                capture3.Read(frame3);
+                capture4.Read(frame4);
+                //viewer.Image = capture.QueryFrame();
+                detect(frame1, car_Cascade, scale, count, "cam1",f);
+                detect(frame2, car_Cascade, scale, count, "cam2",f);
+                detect(frame3, car_Cascade, scale, count, "cam3",f);
+                detect(frame4, car_Cascade, scale, count, "cam4",f);
+
+
+            });
+
+        }
+        void detect(Mat frame, CascadeClassifier car_Cascade, int scale, int count, string name,  Form2 f)
+        {
+            Rectangle[] cars = new Rectangle[15];
+            Mat gray = new Mat();
+            Mat smallImg = new Mat();
+            CvInvoke.CvtColor(frame, gray, Emgu.CV.CvEnum.ColorConversion.Bgr2Gray);
+            double fx = 1 / scale;
+
+            CvInvoke.Resize(gray, smallImg, new Size(gray.Width, gray.Height), fx, fx, Emgu.CV.CvEnum.Inter.Linear);
+            CvInvoke.EqualizeHist(smallImg, smallImg);
+            Size d = new Size(150, 150);
+            cars = car_Cascade.DetectMultiScale(smallImg, 1.1, 3, d);
+            
+            if(cars.Count() >= 1)
+            if (name == "cam1")
+            {
+                f.updateDriver(1);
+            }
+            if (name == "cam2")
+            {
+                f.updateDriver(2);
+            }
+            if (name == "cam3")
+            {
+                f.updateDriver(3);
+            }
+            if (name == "cam4")
+            {
+                f.updateDriver(4);
+            }
+            //Thread.Sleep();
         }
     }
 }
+

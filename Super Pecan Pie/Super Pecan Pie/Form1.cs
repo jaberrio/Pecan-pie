@@ -15,14 +15,15 @@ namespace Super_Pecan_Pie
     public partial class Form1 : Form
     {
 
-
+        Form2 otherWindow;
         public Form1()
         {
             InitializeComponent();
-            var otherWindow = new Form2();
+            otherWindow = new Form2();
             otherWindow.Show();
+            
         }
-
+        
 
 
         private void laodDataBase(object sender, EventArgs e)
@@ -84,6 +85,18 @@ namespace Super_Pecan_Pie
             //functions.GetLocation();
         }
 
+        private void imagesInBackground_Click(object sender, EventArgs e)
+        {
+            openCV g = new openCV();
+            g.FindClose(otherWindow);
+
+
+        }
+
+        private void label1_Click_1(object sender, EventArgs e)
+        {
+
+        }
     }
     
 }

@@ -19,7 +19,9 @@
             }
             base.Dispose(disposing);
         }
-
+        public void updateDriver(int i)
+        {
+        }
         #region Windows Form Designer generated code
 
         /// <summary>
