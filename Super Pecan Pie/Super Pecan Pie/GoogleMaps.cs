@@ -99,26 +99,31 @@ namespace Super_Pecan_Pie
             return rtn;
         }
 
-
-
-        public   GeoCoordinate GetLocation()
+        public static GeoCoordinate GetLocationProperty()
         {
-            GeoCoordinateWatcher watcher;
-            watcher = new GeoCoordinateWatcher();
+            GeoCoordinateWatcher watcher = new GeoCoordinateWatcher();
+            System.Threading.Thread.Sleep(1000);
+            // Do not suppress prompt, and wait 1000 milliseconds to start.
+            watcher.TryStart(false, TimeSpan.FromSeconds(1d));
 
-            watcher.PositionChanged += (sender, e) =>
+            GeoCoordinate coord = watcher.Position.Location;
+
+
+            if (coord.IsUnknown != true)
             {
-                var coordinate = e.Position.Location;
-                Console.WriteLine("Lat: {0}, Long: {1}", coordinate.Latitude,
-                    coordinate.Longitude);
-                 
-                watcher.Stop(); 
-            };
 
-            
+                return coord;
+            }
+            else
+            {
+                Console.WriteLine("Unknown latitude and longitude.");
+                return GetLocationProperty();
+
+            }
         }
- 
-        public void test()// This needs to be implemented into GUI
+
+
+        void test()// This needs to be implemented into GUI
         {
             //string textBoxContents = textBox1.Text;
             var functions = new functions1();
@@ -130,8 +135,7 @@ namespace Super_Pecan_Pie
             startlocation = functions.CoordFetch(directions);
 
             //Stepped4ActDataB
-            var stepped = functions.CordFetchExtra(directions);
-
+            
 
 
             int i = 0;
@@ -149,7 +153,6 @@ namespace Super_Pecan_Pie
                 k++;
             }
 
-
         }
 
         public class DistanceManeuver
@@ -157,6 +160,7 @@ namespace Super_Pecan_Pie
             public string maneuver;
             public string distance;
         }
+
         public class GeocodedWaypoint
         {
             public string geocoder_status { get; set; }
