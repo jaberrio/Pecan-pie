@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Speech.Recognition;
 using System.Speech.Synthesis;
+using System.Device.Location;
 
 namespace Super_Pecan_Pie
 {
@@ -16,7 +17,7 @@ namespace Super_Pecan_Pie
 
         public Form1()
         {
-            InitializeComponent();            
+            InitializeComponent();
         }
 
 
@@ -25,7 +26,6 @@ namespace Super_Pecan_Pie
         {
             ActDataB dataB = new ActDataB();
             List<Accident> test = dataB.getAccidentsNearBy(29.626945f, -82.372390f, 0.02414016f);
-            dataB.findCrashesForAllPoints();
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -74,9 +74,11 @@ namespace Super_Pecan_Pie
 
         private void button4_Click(object sender, EventArgs e)
         {
-            var functions = new functions1();
-            //functions.GetLocation();
+
+            
+            
         }
+
     }
     
 }
