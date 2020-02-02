@@ -30,7 +30,6 @@ namespace Super_Pecan_Pie
         private void label1_Click(object sender, EventArgs e)
         {
             
-
             /*
             ImageViewer viewer = new ImageViewer();
             VideoCapture capture = new VideoCapture();

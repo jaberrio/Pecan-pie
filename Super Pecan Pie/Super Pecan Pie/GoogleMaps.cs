@@ -53,6 +53,47 @@ namespace Super_Pecan_Pie
             return Location;
         }
 
+        public List<StartLocation2> CordFetchExtra(RootObject direction, float distenceStep,StartLocation2 currtLoc)
+        {
+            List<StartLocation2> rtn = new List<StartLocation2>();
+            List<StartLocation2> use = CoordFetch(direction).ToList();
+            
+            var e = use.GetEnumerator();
+            var pre = e.Current;
+            while (e.MoveNext())
+            {
+                var Deltalat = e.Current.lat - pre.lat;
+                var Deltalon = e.Current.lng - pre.lng;
+                var Distance = Math.Sqrt(Math.Pow(Deltalat, 2) + Math.Pow(Deltalon, 2)); //hyp
+                var Step     = Distance / distenceStep;
+
+                var tempNumLat = Deltalat / Step;
+                var tempNumLng = Deltalon / Step;
+
+                //var slope = Deltalon / Deltalat;
+                //var temp = e.Current;
+                for (int i = 0; i < Step; i++)
+                {
+                    Deltalat += tempNumLat;
+                    Deltalon += tempNumLng;
+                    StartLocation2 temp = new StartLocation2();
+                    temp.lat = Deltalat;
+                    temp.lng = Deltalon;
+                    //float z = (float)(Step * Math.Atan(Deltalon / Deltalat));
+                    //temp.lat = e.Current.lat + z;
+                    //temp.lng = temp.lat * slope;
+
+                    rtn.Add(temp);
+                }
+
+                pre = e.Current;
+            }
+            
+            return rtn;
+        }
+
+
+
         public   GeoCoordinate GetLocation()
         {
             var watcher = new GeoCoordinateWatcher();
@@ -79,6 +120,10 @@ namespace Super_Pecan_Pie
             //directions = functions.API_Call(textBoxContents);
             steps1 = functions.DirectionFetch(directions);
             startlocation = functions.CoordFetch(directions);
+
+            //Stepped4ActDataB
+            var stepped = functions.CordFetchExtra(directions);
+
 
 
             int i = 0;
