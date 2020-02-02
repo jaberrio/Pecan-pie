@@ -16,7 +16,11 @@ namespace Super_Pecan_Pie
         {
             InitializeComponent();
 
-            serialPort1.Open();
+            try
+            {
+                serialPort1.Open();
+            }
+            catch { Console.Write("Input device not connected"); } 
         }
 
         private void Form2_Load(object sender, EventArgs e)
