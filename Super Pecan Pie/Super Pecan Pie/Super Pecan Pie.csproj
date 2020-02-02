@@ -169,6 +169,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="API_key.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Files\cars.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
