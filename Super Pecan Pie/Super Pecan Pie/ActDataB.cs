@@ -31,7 +31,7 @@ namespace Super_Pecan_Pie
 
         //0.01 degrees degrees = 1km
 
-        public List<Accident> getAccidentsNearBy(float lat, float lon,float PlusMinus)
+        public List<Accident> getAccidentsNearBy(float lat, float lon, float PlusMinus)
         {
             List<Accident> rtn = new List<Accident>();
             List<Accident> temp = new List<Accident>();
@@ -80,6 +80,8 @@ namespace Super_Pecan_Pie
                     }
                 }
             }
+            lowerB = 0;
+            upperB = 0;
             for (int i = 0; i < temp.Count(); i ++)
             {
                 if(temp[i].Lon <= (lon - PlusMinus))
@@ -96,27 +98,47 @@ namespace Super_Pecan_Pie
                     //break;
                 }
             }
-            for (int i = lowerB; i < upperB; i++)
+            for (int i = lowerB; i <= upperB; i++)
             {
                 rtn.Add(temp[i]);
             }
             return rtn;
         }
-
+        
         public void findCrashesForAllPoints()
         {
             StreamWriter fr = new StreamWriter("CrashNums.csv");
 
             var temp = 0;
-            foreach(var accident in act)
+            foreach (var item in act)
             {
-                temp = getAccidentsNearBy(accident.Lat, accident.Lon, 0.01455541f).Count;
+                temp = getAccidentsNearBy(item.Lat, item.Lon, 0.01455541f).Count + 1;
                 fr.WriteLine(temp);
                 fr.AutoFlush = true;
             }
-            //Console.WriteLine(act.Count);
-            //List<Accident> temp = new List<Accident>();
+        }
 
+        public List<Accident> dangerSpots()
+        {
+            float stdev = 7.790537924f;
+            float mean = 9.130509803f;
+            StreamReader sr = new StreamReader("CrashNums.csv");
+            List<Accident> rtn = new List<Accident>();
+            int i = 0;
+
+            while (!sr.EndOfStream)
+            {
+                string temp = sr.ReadLine();
+                int num;
+
+                int.TryParse(temp, out num);
+                if(num > mean + (3 * stdev))
+                {
+                    rtn.Add(act[i]);
+                }
+                i++;
+            }
+            return rtn;
         }
     }
 }
