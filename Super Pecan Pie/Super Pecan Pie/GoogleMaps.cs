@@ -12,6 +12,12 @@ namespace Super_Pecan_Pie
 {
     public class functions1
     {
+            public string ReadFile(string filename)
+        {
+            string API_key = File.ReadAllText("API_key.txt");
+            return API_key;
+        }
+
         public RootObject API_Call(string APIREQUEST)// Sends API request and Deserializes it into the classes
         {
             var client = new WebClient();
@@ -22,7 +28,8 @@ namespace Super_Pecan_Pie
         public string API_request(GeoCoordinate coord, string destination)// Takes current location (in lng and lat) and then a destination and returns a string API Reuqes
         {
             string APIREQUEST;
-            APIREQUEST = "https://maps.googleapis.com/maps/api/directions/json?origin=" + coord.Latitude + "," + coord.Longitude + "&destination=" + destination + "&key=AIzaSyDJGo7ro2PGGshDBfo5epne5AvpynhRjTs";
+            string API_key = ReadFile("API_key.txt");
+            APIREQUEST = "https://maps.googleapis.com/maps/api/directions/json?origin=" + coord.Latitude + "," + coord.Longitude + "&destination=" + destination + "&key=" + API_key;
             return APIREQUEST;
         }
         public DistanceManeuver[] DirectionFetch(RootObject directions) // returns array of  direction and maneuver of next step
@@ -53,22 +60,64 @@ namespace Super_Pecan_Pie
             return Location;
         }
 
-        public   GeoCoordinate GetLocation()
+        public List<StartLocation2> CordFetchExtra(RootObject direction, float distenceStep,StartLocation2 currtLoc)
         {
-            var watcher = new GeoCoordinateWatcher();
+            List<StartLocation2> rtn = new List<StartLocation2>();
+            List<StartLocation2> use = CoordFetch(direction).ToList();
+            
+            var e = use.GetEnumerator();
+            var pre = e.Current;
+            while (e.MoveNext())
+            {
+                var Deltalat = e.Current.lat - pre.lat;
+                var Deltalon = e.Current.lng - pre.lng;
+                var Distance = Math.Sqrt(Math.Pow(Deltalat, 2) + Math.Pow(Deltalon, 2)); //hyp
+                var Step     = Distance / distenceStep;
 
-            // Do not suppress prompt, and wait 1000 milliseconds to start.
-            watcher.TryStart(false , TimeSpan.FromMilliseconds(1000));
+                var tempNumLat = Deltalat / Step;
+                var tempNumLng = Deltalon / Step;
 
-            GeoCoordinate coord = watcher.Position.Location;
-            return coord;
+                //var slope = Deltalon / Deltalat;
+                //var temp = e.Current;
+                for (int i = 0; i < Step; i++)
+                {
+                    Deltalat += tempNumLat;
+                    Deltalon += tempNumLng;
+                    StartLocation2 temp = new StartLocation2();
+                    temp.lat = Deltalat;
+                    temp.lng = Deltalon;
+                    //float z = (float)(Step * Math.Atan(Deltalon / Deltalat));
+                    //temp.lat = e.Current.lat + z;
+                    //temp.lng = temp.lat * slope;
+
+                    rtn.Add(temp);
+                }
+
+                pre = e.Current;
+            }
+            
+            return rtn;
         }
 
 
 
+        public   GeoCoordinate GetLocation()
+        {
+            GeoCoordinateWatcher watcher;
+            watcher = new GeoCoordinateWatcher();
 
+            watcher.PositionChanged += (sender, e) =>
+            {
+                var coordinate = e.Position.Location;
+                Console.WriteLine("Lat: {0}, Long: {1}", coordinate.Latitude,
+                    coordinate.Longitude);
+                 
+                watcher.Stop(); 
+            };
 
-
+            
+        }
+ 
         public void test()// This needs to be implemented into GUI
         {
             //string textBoxContents = textBox1.Text;
@@ -79,6 +128,10 @@ namespace Super_Pecan_Pie
             //directions = functions.API_Call(textBoxContents);
             steps1 = functions.DirectionFetch(directions);
             startlocation = functions.CoordFetch(directions);
+
+            //Stepped4ActDataB
+            var stepped = functions.CordFetchExtra(directions);
+
 
 
             int i = 0;
