@@ -14,13 +14,13 @@ namespace Super_Pecan_Pie
         public static int x, y;
         public static int state = 3;
         public static int substate = 3;
-        public static bool trig;
-        static DateTime now = DateTime.Now;
+        public static bool trig = false;
+        static DateTime pre2 = DateTime.Now;
         static DateTime pre = DateTime.Now;
 
         static Font f = new Font(FontFamily.GenericSerif, 18, FontStyle.Bold);
 
-        
+
         static CircleButton()
         {
         }
@@ -39,7 +39,8 @@ namespace Super_Pecan_Pie
                         if (trig)
                         {
                             substate = 0;
-                        } else
+                        }
+                        else
                         {
                             Console.WriteLine("JOYX > 256");
                             trig = true;
@@ -98,12 +99,12 @@ namespace Super_Pecan_Pie
             g.FillEllipse(Brushes.White, x, y, 150, 150);
             g.FillEllipse(Brushes.Red, (x + 100 / 2) - ((joyX / 512) * 20), (y + 100 / 2) - ((joyY / 512) * 20), 50, 50);
 
-            string[] left = { "Julian",   "Arby's",      "Oaks Mall",           "Friends"};
-            string[] up =   { "Peyton",   "Chuy's",      "Universal Studios",   "Food" };
-            string[] right = { "Tristan",  "Hurrican BTW", "Gatorz Bowling",    "Fun" };
+            string[] left = { "Julian", "Arby's", "Oaks Mall", "Friends" };
+            string[] up = { "Peyton", "Chuy's", "Universal Studios", "Food" };
+            string[] right = { "Tristan", "Hurrican BTW", "Gatorz Bowling", "Fun" };
 
             g.DrawString(left[state], f, Brushes.Red, x - 50, y + 60);
-            g.DrawString(up[state], f, Brushes.Red, x+45, y );
+            g.DrawString(up[state], f, Brushes.Red, x + 45, y);
             g.DrawString(right[state], f, Brushes.Red, x + 120, y + 60);
 
             string[] food = { "1405+SW+13th+St+Gainesville", "3410+SW+Archer+Rd+Gainesville", "1404+W.+Univeresity+Avenue+suites+Gainesville+FL" };
@@ -111,38 +112,72 @@ namespace Super_Pecan_Pie
 
             if (trig)
             {
-                switch (state)
+                if (joyX != 0 || joyY != 0)
                 {
-                    case 0:
-                        //Call someone
-                        trig = false;
-                        state = 3;
-                        substate = 3;
-                        break;
-                    case 1:
-                        var functions = new functions1();
-                        GeoCoordinate coord = functions1.GetLocationProperty();
-                        string APIREQUEST = functions.API_request(coord, food[substate]);
-                        ActDataB dataB = new ActDataB();
-                        List<Accident> danger = dataB.dangerSpots();
-                        functions.API_Call(APIREQUEST, danger);
-                        trig = false;
-                        state = 3;
-                        substate = 3;
-                        break;
-                    case 2:
-                        trig = false;
-                        state = 3;
-                        substate = 3;
-                        break;
-                    default:
-                        state = 3;
-                        substate = 3;
-                        trig = false;
-                        break;
+                    if (DateTime.Now.Subtract(pre2).TotalMilliseconds > 300)
+                    {
+                        
+                        pre2 = DateTime.Now.AddSeconds(10);
+                        if (joyX > 256)
+                        {
+                                substate = 0;
+                        }
+                        //Right
+                        if (joyX < -256)
+                        {
+                                substate = 2;
+                        }
+
+                        //Up
+                        if (joyY > 256)
+                        {
+                                substate = 1;
+                        }
+                        //Down
+                        if (joyY < -256)
+                        {
+                            
+                               substate = 3;
+                            state = 3;
+                            
+                        }
+
+
+                        switch (state)
+                        {
+                            case 0:
+                                //Call someone
+                                trig = false;
+                                state = 3;
+                                substate = 3;
+                                break;
+                            case 1:
+                                var functions = new functions1();
+                                GeoCoordinate coord = functions1.GetLocationProperty();
+                                string APIREQUEST = functions.API_request(coord, food[substate]);
+                                ActDataB dataB = new ActDataB();
+                                List<Accident> danger = dataB.dangerSpots();
+                                functions.API_Call(APIREQUEST, danger);
+                                trig = false;
+                                state = 3;
+                                substate = 3;
+                                break;
+                            case 2:
+                                trig = false;
+                                state = 3;
+                                substate = 3;
+                                break;
+                            default:
+                                state = 3;
+                                substate = 3;
+                                trig = false;
+                                break;
+                        }
+                    }
                 }
+                else pre2 = DateTime.Now;
+
             }
-            
         }
     }
 }
