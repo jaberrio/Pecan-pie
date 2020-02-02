@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Super_Pecan_Pie
 {
-    class Accident
+    public class Accident
     {
         public float Lat, Lon;
 
