@@ -19,15 +19,22 @@ namespace Super_Pecan_Pie
         public Form1()
         {
             InitializeComponent();
+            var functions = new functions1();
+            GeoCoordinate coord = functions1.GetLocationProperty();
+            string APIREQUEST;
+            APIREQUEST = functions.API_request(coord, "Disneyland");
+            ActDataB dataB = new ActDataB();
+            List<Accident> test = dataB.getAccidentsNearBy(29.626945f, -82.372390f, 0.02414016f);
+            List<Accident> danger = dataB.dangerSpots();
+            functions.API_Call(APIREQUEST, danger);
+
         }
 
 
 
         private void laodDataBase(object sender, EventArgs e)
         {
-            ActDataB dataB = new ActDataB();
-            List<Accident> test = dataB.getAccidentsNearBy(29.626945f, -82.372390f, 0.02414016f);
-            List<Accident> danger = dataB.dangerSpots();
+        
             //dataB.findCrashesForAllPoints();
 
         }
