@@ -110,6 +110,7 @@
   <ItemGroup>
     <Compile Include="Accident .cs" />
     <Compile Include="ActDataB.cs" />
+    <Compile Include="CircleButton.cs" />
     <Compile Include="Form2.cs">
       <SubType>Form</SubType>
     </Compile>

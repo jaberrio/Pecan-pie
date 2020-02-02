@@ -47,7 +47,10 @@ namespace Super_Pecan_Pie
             int y=0;
             string a = "";
             g.Clear(Color.Black);
-             
+
+            CircleButton.x = ((Width / 12));
+            CircleButton.y = (Height - (Height / 4));
+            
             if (serialPort1.IsOpen)
             {
                 try
@@ -57,8 +60,11 @@ namespace Super_Pecan_Pie
                     y = int.Parse(a.Split(' ')[1]);
                 } catch { }
             }
-            g.FillEllipse(Brushes.White,(Width / 12),Height - (Height / 4), 100, 100);
+
+            CircleButton.draw(g, this,x,y);
+
             g.DrawString(System.DateTime.Now.ToString(), new Font(FontFamily.GenericSerif, 15), Brushes.White, 50, 50);
+            g.DrawString((50 + (new Random()).Next(-2, 2)).ToString() + "MPH", new Font(FontFamily.GenericSerif, 30), Brushes.White, Width - 200, Height - 100);
         }
     }
 }
