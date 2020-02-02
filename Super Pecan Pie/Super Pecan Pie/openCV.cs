@@ -45,14 +45,14 @@ namespace Super_Pecan_Pie
                 
                 
                 capture1.Read(frame1);
-                capture2.Read(frame2);
-                capture3.Read(frame3);
-                capture4.Read(frame4);
+                capture1.Read(frame2);
+                capture1.Read(frame3);
+                capture1.Read(frame4);
                 //viewer.Image = capture.QueryFrame();
-                detectAndDraw( frame1, car_Cascade, scale, count,viewer1, "cam1");
-                detectAndDraw(frame2, car_Cascade, scale, count, viewer2,"cam2");
-                detectAndDraw(frame3, car_Cascade, scale, count, viewer3,"cam3");
-                detectAndDraw(frame4, car_Cascade, scale, count, viewer4,"cam4");
+                detectAndDraw( frame1, car_Cascade, scale, count, "cam1");
+                detectAndDraw(frame2, car_Cascade, scale, count,"cam2");
+                detectAndDraw(frame3, car_Cascade, scale, count,"cam3");
+                detectAndDraw(frame4, car_Cascade, scale, count,"cam4");
 
 
             });
@@ -106,7 +106,7 @@ namespace Super_Pecan_Pie
             
         }
 
-        void detectAndDraw(Mat frame,CascadeClassifier cascade, double scale, int count, ImageViewer viewer,string name)
+        void detectAndDraw(Mat frame,CascadeClassifier cascade, double scale, int count,string name)
         {
             Rectangle[] cars = new Rectangle[100];
             Mat gray = new Mat();
@@ -116,8 +116,9 @@ namespace Super_Pecan_Pie
 
             CvInvoke.Resize(gray, smallImg, new Size(gray.Width, gray.Height), fx, fx, Emgu.CV.CvEnum.Inter.Linear);
             CvInvoke.EqualizeHist(smallImg, smallImg);
-            Size s = new Size(30, 30);
+            Size s = new Size(40, 40);
             cars = cascade.DetectMultiScale(smallImg, 1.1, 2, s);
+            
 
             for (int i = 0; i < cars.Count(); i++)
             {
@@ -131,6 +132,7 @@ namespace Super_Pecan_Pie
                     Point(cvRound(r.x * scale), cvRound(r.y * scale)),
                     Point(cvRound((r.x + r.width - 1) * scale), cvRound((r.y + r.height - 1) * scale)),
                     color, 3, 8, 0);*/
+                //cars.ElementAt(i).
                 CvInvoke.Rectangle(frame, cars.ElementAt(i), new MCvScalar(255, 0, 0));
                 //smallImgROI = smallImg(r);
                 //count++;

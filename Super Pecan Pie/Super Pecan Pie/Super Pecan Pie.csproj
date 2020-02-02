@@ -107,6 +107,7 @@
       <Version>5.1.7</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Files\cars.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
