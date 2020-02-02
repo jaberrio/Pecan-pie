@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Speech.Synthesis;
+using System.Speech.AudioFormat;
 
 namespace Super_Pecan_Pie
 {
@@ -13,6 +14,7 @@ namespace Super_Pecan_Pie
         public SpeechSynthesize()
         {
             synthesizerB.SetOutputToDefaultAudioDevice();
+            synthesizerB.SelectVoice("Microsoft Zira Desktop");
             synthesizerB.Speak("I do be working doh");
         }
     }
