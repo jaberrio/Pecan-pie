@@ -70,5 +70,6 @@ namespace Super_Pecan_Pie
             g.DrawString(System.DateTime.Now.ToString(), new Font(FontFamily.GenericSerif, 15), Brushes.White, 50, 50);
             g.DrawString((50 + (new Random()).Next(-2, 2)).ToString() + "MPH", new Font(FontFamily.GenericSerif, 30), Brushes.White, Width - 200, Height - 100);
         }
+
     }
 }
