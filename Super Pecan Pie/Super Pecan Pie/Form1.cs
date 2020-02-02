@@ -70,6 +70,12 @@ namespace Super_Pecan_Pie
             openCV f = new openCV();
             f.findImages();
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            var functions = new functions1();
+            functions.GetLocation();
+        }
     }
     
 }
