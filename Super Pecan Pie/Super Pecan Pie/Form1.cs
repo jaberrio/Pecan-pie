@@ -22,15 +22,19 @@ namespace Super_Pecan_Pie
             otherWindow = new Form2();
             otherWindow.Show();
             var functions = new functions1();
+            var directions = new RootObject();
             GeoCoordinate coord = functions1.GetLocationProperty();
             string APIREQUEST;
             APIREQUEST = functions.API_request(coord, "Disneyland");
             ActDataB dataB = new ActDataB();
             List<Accident> test = dataB.getAccidentsNearBy(29.626945f, -82.372390f, 0.02414016f);
             List<Accident> danger = dataB.dangerSpots();
-            functions.API_Call(APIREQUEST, danger);
-
-
+            directions = functions.API_Call(APIREQUEST, danger);
+            SpeechSynthesize synthesizerA = new SpeechSynthesize();
+            //synthesizerA.distanceMan = functions.DirectionFetch(directions);
+            synthesizerA.readDistanceMan("Disneyland", 1);
+            synthesizerA.readDistanceMan(functions.TotalDuration(directions), 2);
+            synthesizerA.readDistanceMan(functions.DangerZones.Count.ToString(), 3);
         }
 
 
@@ -78,7 +82,7 @@ namespace Super_Pecan_Pie
 
         private void synthesistest(object sender, EventArgs e)
         {
-            SpeechSynthesize synthesizerA = new SpeechSynthesize();
+            //SpeechSynthesize synthesizerA = new SpeechSynthesize();
         }
         private void vidFeed_Click(object sender, EventArgs e)
         {
