@@ -26,6 +26,7 @@ namespace Super_Pecan_Pie
         {
             ActDataB dataB = new ActDataB();
             List<Accident> test = dataB.getAccidentsNearBy(29.626945f, -82.372390f, 0.02414016f);
+            dataB.findCrashesForAllPoints();
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -74,9 +75,8 @@ namespace Super_Pecan_Pie
 
         private void button4_Click(object sender, EventArgs e)
         {
-
-            
-            
+            var functions = new functions1();
+            //functions.GetLocation();
         }
 
     }
