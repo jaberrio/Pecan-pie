@@ -116,7 +116,6 @@ namespace Super_Pecan_Pie
             }
             else
             {
-                Console.WriteLine("Unknown latitude and longitude.");
                 return GetLocationProperty();
 
             }
